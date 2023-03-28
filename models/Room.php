@@ -93,6 +93,8 @@ class Room
 
     public function validate(array &$errors = []) : bool
     {
+        $rooms = Room::all();
+
         if (is_string($this->name))
             $this->name = trim($this->name);
         if (!$this->name)
@@ -100,6 +102,9 @@ class Room
 
         if (is_string($this->no))
             $this->no = trim($this->no);
+        foreach ($rooms as $room)
+            if ($room->no === $this->no && $room->room_id !== $this->room_id)
+                $errors['no'] = "Číslo již existuje";
         if (!$this->no)
             $errors['no'] = "Číslo nemůže být prázdné";
 
@@ -122,7 +127,6 @@ class Room
             'no' => $this->no,
             'phone' => $this->phone
         ]);
-
     }
 
     public function update() : bool
