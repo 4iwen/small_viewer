@@ -7,7 +7,7 @@ class IndexPage extends Page
 
     protected function pageBody(): string
     {
-        return "<a class='a-no-decoration' href='https://github.com/4iwen/small_viewer/'>github</a>";
+        return "";
     }
 }
 

@@ -1,8 +1,30 @@
-<h1><a class="a-no-decoration" href="/small_viewer/www">Prohlížeč databáze</a></h1>
-
+<h1><a class="a-no-decoration" href="/small_viewer/www/">Prohlížeč databáze</a></h1>
+<a class='a-no-decoration' href='https://github.com/4iwen/small_viewer/'>github</a>
 <nav>
-    <ul>
-        <li><a href="/small_viewer/www/room/list.php">Místnosti</a></li>
-        <li><a href="/small_viewer/www/staff/list.php">Lidé</a></li>
-    </ul>
+    <div class="flex-container">
+        <ul>
+            <li><a href="/small_viewer/www/room/list.php">Místnosti</a></li>
+            <li><a href="/small_viewer/www/staff/list.php">Lidé</a></li>
+        </ul>
+        <div class="flex-container">
+
+            {{#isLogged}}
+                <!-- change password button -->
+                <form action="/small_viewer/www/change_password.php" method="post">
+                    <input type="submit" value="Změnit heslo" class="btn btn-warning">
+                </form>
+
+                <!-- logout button -->
+                <form action="/small_viewer/www/logout.php" method="post">
+                    <input type="submit" value="Odhlásit se" class="btn btn-info" onclick="return confirm('Opravdu se chcete odhlásit?')">
+                </form>
+            {{/isLogged}}
+            {{^isLogged}}
+                <!-- login button -->
+                <form action="/small_viewer/www/login.php" method="post">
+                    <input type="submit" value="Přihlásit se" class="btn btn-info">
+                </form>
+            {{/isLogged}}
+        </div>
+    </div>
 </nav>

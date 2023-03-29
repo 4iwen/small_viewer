@@ -1,8 +1,10 @@
 <?php
+session_start();
 
 abstract class Page
 {
     public string $title;
+
 
     protected function prepareData() : void {
 
@@ -17,7 +19,9 @@ abstract class Page
     }
 
     protected function pageHeader() : string {
-        return MustacheProvider::get()->render("page_header", []);
+
+        $isLogged = $_SESSION["employee"] ?? null;
+        return MustacheProvider::get()->render("page_header", ["isLogged" => $isLogged]);
     }
 
     protected abstract function pageBody() : string;
@@ -30,17 +34,26 @@ abstract class Page
             $this->HTTPHeaders();
 
             $pageData = [];
-            //získá hlavičky
+
             $pageData["htmlHead"] = $this->HTMLHead();
 
-            //získá záhlaví
-            $pageData["pageHeader"] = $this->pageHeader();
+            if (isset($_SESSION["employee"]))
+            {
+                $pageData["pageHeader"] = $this->pageHeader();
+                $pageData["pageBody"] = $this->pageBody();
+            }
+            else
+            {
+                $loginError = $_SESSION["loginError"] ?? null;
+                $pageData["pageBody"] = MustacheProvider::get()->render("login_form", ["loginError" => $loginError]);
+            }
 
-            //získá tělo stránky
-            $pageData["pageBody"] = $this->pageBody();
+
 
             //předá šabloně stránky data pro vykreslení
             echo MustacheProvider::get()->render("page", $pageData);
+
+            dump($_SESSION);
         }
 
         catch (BaseException $e) {

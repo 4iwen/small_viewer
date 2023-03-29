@@ -13,7 +13,8 @@ class RoomListPage extends CRUDPage
         //získám data o místnostech
         $rooms = Room::all();
 
-        $html .= MustacheProvider::get()->render("room_list", ["rooms" => $rooms]);
+        $isAdmin = $_SESSION["employee"]->admin ?? null;
+        $html .= MustacheProvider::get()->render("room_list", ["rooms" => $rooms, "isAdmin" => $isAdmin]);
         //vyrenderuju
 
         return $html;

@@ -3,9 +3,6 @@ require_once "../../bootstrap/bootstrap.php";
 
 class RoomInsertPage extends CRUDPage
 {
-
-
-
     public string $title = "Založit novou místnost";
     protected int $state;
     private Room $room;
