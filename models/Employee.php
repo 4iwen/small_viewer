@@ -147,6 +147,13 @@ class Employee
         $pdo = PDOProvider::get();
         $query = "INSERT INTO `" . self::$table . "` (`name`, `surname`, `wage`, `room`, `job`, `login`, `password`, `admin`) VALUES (:name, :surname, :wage, :room, :job, :login, :password, :admin)";
 
+        if (!isset($this->login))
+            $this->login = null;
+        if (!isset($this->password))
+            $this->password = null;
+        if (!isset($this->admin))
+            $this->admin = null;
+
         $stmt = $pdo->prepare($query);
         return $stmt->execute([
             'name' => $this->name,
@@ -154,15 +161,23 @@ class Employee
             'wage' => $this->wage,
             'room' => $this->room,
             'job' => $this->job,
-            'login' => null,
-            'password' => null,
-            'admin' => null
+            'login' => $this->login,
+            'password' => $this->password,
+            'admin' => $this->admin
         ]);
     }
 
     public function update(): bool {
         $pdo = PDOProvider::get();
         $query = "UPDATE `" . self::$table . "` SET `name` = :name, `surname` = :surname, `wage` = :wage, `room` = :room, `job` = :job, `login` = :login, `password` = :password, `admin` = :admin WHERE `employee_id` = :employee_id";
+
+        if (!isset($this->login))
+            $this->login = null;
+        if (!isset($this->password))
+            $this->password = null;
+        if (!isset($this->admin))
+            $this->admin = null;
+
         $stmt = $pdo->prepare($query);
         return $stmt->execute([
             'employee_id' => $this->employee_id,
@@ -171,9 +186,9 @@ class Employee
             'wage' => $this->wage,
             'room' => $this->room,
             'job' => $this->job,
-            'login' => null,
-            'password' => null,
-            'admin' => null
+            'login' => $this->login,
+            'password' => $this->password,
+            'admin' => $this->admin
         ]);
     }
 }
