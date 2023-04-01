@@ -21,7 +21,7 @@ if ($loginSuccess) {
 function readPost(): void
 {
     global $login, $password;
-;
+
     $login = filter_input(INPUT_POST, 'login', FILTER_DEFAULT);
     $password = filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
 }
