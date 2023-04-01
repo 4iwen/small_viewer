@@ -77,8 +77,90 @@ class Employee
         return "ORDER BY " . implode(" ", $sqlChunks);
     }
 
+    public static function deleteById(int $employeeId): bool
+    {
+        $query = "DELETE FROM `".self::$table."` WHERE `employee_id` = :employeeId";
+
+        $pdo = PDOProvider::get();
+
+        $stmt = $pdo->prepare($query);
+        return $stmt->execute([
+            'employeeId' => $employeeId,
+        ]);
+    }
+
+    public static function readPost() : Employee
+    {
+        $employee = new Employee();
+
+        $employee->employee_id = filter_input(INPUT_POST, 'employee_id', FILTER_VALIDATE_INT);
+        $employee->name = filter_input(INPUT_POST, 'name', FILTER_DEFAULT);
+        $employee->surname = filter_input(INPUT_POST, 'surname', FILTER_DEFAULT);
+        $employee->wage = filter_input(INPUT_POST, 'wage', FILTER_VALIDATE_INT);
+        $employee->room = filter_input(INPUT_POST, 'room_id', FILTER_VALIDATE_INT);
+        $employee->job = filter_input(INPUT_POST, 'job', FILTER_DEFAULT);
+
+        return $employee;
+    }
+
+    public static function findByID(int $id) : Employee|null
+    {
+        $pdo = PDOProvider::get();
+        $query = "SELECT * FROM `" . self::$table . "` WHERE `employee_id` = $id";
+        $stmt = $pdo->query($query);
+
+        if ($stmt->rowCount() < 1)
+            return null;
+
+        return new Employee($stmt->fetch(PDO::FETCH_ASSOC));
+    }
+
+
+    public function validate(array &$errors = []) : bool
+    {
+        if (is_string($this->name))
+            $this->name = trim($this->name);
+        if (!$this->name)
+            $errors['name'] = "Jméno musí být zadáno";
+
+        if (is_string($this->surname))
+            $this->surname = trim($this->surname);
+        if (!$this->surname)
+            $errors['surname'] = "Příjmení musí být zadáno";
+
+        if ($this->wage === null)
+            $errors['wage'] = "Plat musí být zadán";
+        else if ($this->wage < 0)
+            $errors['wage'] = "Plat musí být kladné číslo";
+
+        if (!$this->room)
+            $errors['room_id'] = "Místnost musí být zadána";
+
+        if (!$this->job)
+            $errors['job'] = "Pracovní pozice musí být zadána";
+
+        return count($errors) === 0;
+    }
+
+
+    public function insert() : bool {
+        $pdo = PDOProvider::get();
+        $query = "INSERT INTO `" . self::$table . "` (`name`, `surname`, `wage`, `room`, `job`, `login`, `password`, `admin`) VALUES (:name, :surname, :wage, :room, :job, :login, :password, :admin)";
+
+        $stmt = $pdo->prepare($query);
+        return $stmt->execute([
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'wage' => $this->wage,
+            'room' => $this->room,
+            'job' => $this->job,
+            'login' => null,
+            'password' => null,
+            'admin' => null
+        ]);
+    }
+
     public function update(): bool {
-        // this function updates the database with the stored data
         $pdo = PDOProvider::get();
         $query = "UPDATE `" . self::$table . "` SET `name` = :name, `surname` = :surname, `wage` = :wage, `room` = :room, `job` = :job, `login` = :login, `password` = :password, `admin` = :admin WHERE `employee_id` = :employee_id";
         $stmt = $pdo->prepare($query);
@@ -89,9 +171,9 @@ class Employee
             'wage' => $this->wage,
             'room' => $this->room,
             'job' => $this->job,
-            'login' => $this->login,
-            'password' => $this->password,
-            'admin' => $this->admin
+            'login' => null,
+            'password' => null,
+            'admin' => null
         ]);
     }
 }

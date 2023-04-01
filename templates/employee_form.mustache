@@ -1,28 +1,41 @@
 <h2>
-    {{#room.room_id}}Upravit místnost{{/room.room_id}}
-    {{^room.room_id}}Založit místnost{{/room.room_id}}
+    {{#edit}}Upravit zaměstnance{{/edit}}
+    {{^edit}}Založit zaměstnance{{/edit}}
 </h2>
 <form method="post">
-<!--    id-->
-    <input type="hidden" name="room_id" value="{{room.room_id}}">
+    <!--    id-->
+    <input type="hidden" name="employee_id" value="{{employee.employee_id}}">
 
     <!--    name-->
     <div class="form-group">
-        <label for="name">Název</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{room.name}}" required>
+        <label for="name">Jméno</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{employee.name}}">
         {{#errors.name}}<div class="d-block invalid-feedback">{{errors.name}}</div>{{/errors.name}}
     </div>
-<!--    phone-->
     <div class="form-group">
-        <label for="phone">Telefon</label>
-        <input type="text" class="form-control" id="phone" name="phone" value="{{room.phone}}">
-        {{#errors.phone}}<div class="d-block invalid-feedback">{{errors.phone}}</div>{{/errors.phone}}
+        <label for="surname">Příjmení</label>
+        <input type="text" class="form-control" id="surname" name="surname" value="{{employee.surname}}">
+        {{#errors.surname}}<div class="d-block invalid-feedback">{{errors.surname}}</div>{{/errors.surname}}
     </div>
-<!--    no-->
     <div class="form-group">
-        <label for="no">Číslo</label>
-        <input type="text" class="form-control" id="no" name="no"  value="{{room.no}}"required>
-        {{#errors.no}}<div class="d-block invalid-feedback">{{errors.no}}</div>{{/errors.no}}
+        <label for="job">Zaměstnání</label>
+        <input type="text" class="form-control" id="job" name="job" value="{{employee.job}}">
+        {{#errors.job}}<div class="d-block invalid-feedback">{{errors.job}}</div>{{/errors.job}}
+    </div>
+    <div class="form-group">
+        <label for="wage">Výplata</label>
+        <input type="number" class="form-control" id="wage" name="wage" value="{{employee.wage}}">
+        {{#errors.wage}}<div class="d-block invalid-feedback">{{errors.wage}}</div>{{/errors.wage}}
+    </div>
+    <div class="form-group">
+        <label for="room_id">Místnost</label>
+        <select class="form-control" id="room_id" name="room_id">
+            <option value="">-- vyberte --</option>
+            {{#rooms}}
+                <option value="{{room_id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+            {{/rooms}}
+        </select>
+        {{#errors.room_id}}<div class="d-block invalid-feedback">{{errors.room_id}}</div>{{/errors.room_id}}
     </div>
 <!--tlacitko-->
     <button type="submit" class="btn btn-info mt-3">Odeslat</button>

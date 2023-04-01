@@ -6,6 +6,8 @@ class Room
     public ?string $phone;
     public ?string $no;
 
+    public ?bool $selected = false;
+
     private static string $table = 'room';
 
     public function __construct(array $rawData = [])
@@ -143,8 +145,6 @@ class Room
         ]);
 
     }
-
-
 
     public static function deleteById(int $roomId) : bool
     {

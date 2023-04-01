@@ -21,7 +21,11 @@ abstract class Page
     protected function pageHeader() : string {
 
         $isLogged = $_SESSION["employee"] ?? null;
-        return MustacheProvider::get()->render("page_header", ["isLogged" => $isLogged]);
+
+        $isAdmin = $_SESSION["employee"]->admin ?? null;
+        $username = $_SESSION["employee"]->name . " " . $_SESSION["employee"]->surname . ($isAdmin ? " (admin)" : "");
+
+        return MustacheProvider::get()->render("page_header", ["isLogged" => $isLogged, "username" => $username]);
     }
 
     protected abstract function pageBody() : string;
@@ -48,12 +52,8 @@ abstract class Page
                 $pageData["pageBody"] = MustacheProvider::get()->render("login_form", ["loginError" => $loginError]);
             }
 
-
-
             //předá šabloně stránky data pro vykreslení
             echo MustacheProvider::get()->render("page", $pageData);
-
-            dump($_SESSION);
         }
 
         catch (BaseException $e) {
